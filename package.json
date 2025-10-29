@@ -1,6 +1,6 @@
 {
   "name": "naver-finance-crawl-mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Naver Finance web crawler with MCP server support - crawl Korean stock market data",
   "type": "module",
   "main": "dist/index.js",
@@ -59,7 +59,8 @@
     "cheerio": "^1.0.0-rc.12",
     "commander": "^14.0.2",
     "express": "^5.1.0",
-    "iconv-lite": "^0.7.0"
+    "iconv-lite": "^0.7.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/express": "^5.0.5",

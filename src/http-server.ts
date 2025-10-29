@@ -1,9 +1,9 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express, { Request, Response, NextFunction, Express } from 'express';
 import { NaverFinanceCrawler } from './crawlers/naverFinanceCrawler.js';
 import { StockData } from './types/index.js';
 import { crawlTopSearchedStocksRobust } from './crawlers/TopStocksCrawler.js';
 
-const app = express();
+const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
 // JSON 파싱 미들웨어
