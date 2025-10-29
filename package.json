@@ -1,13 +1,18 @@
 {
   "name": "naver-finance-crawl-mcp",
-  "version": "0.0.0",
-  "description": "A Node.js-based web crawler using Axios and Cheerio",
+  "version": "1.0.0",
+  "description": "Naver Finance web crawler with MCP server support - crawl Korean stock market data",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
     "naver-finance-crawl-mcp": "dist/mcp-server.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests --ext .ts",
@@ -19,15 +24,35 @@
     "dev": "tsx watch src/mcp-server.ts",
     "dev:http": "tsx watch src/http-server.ts",
     "start": "node dist/mcp-server.js",
-    "start:http": "node dist/http-server.js"
+    "start:http": "node dist/http-server.js",
+    "prepublishOnly": "pnpm run typecheck && pnpm run lint && pnpm run test && pnpm run build"
   },
   "keywords": [
     "crawler",
     "finance",
-    "web-scraping"
+    "web-scraping",
+    "naver",
+    "naver-finance",
+    "korean-stocks",
+    "mcp",
+    "mcp-server",
+    "stock-market",
+    "cheerio",
+    "axios"
   ],
-  "author": "",
+  "author": "greatsumini",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/greatsumini/finance-crawl.git"
+  },
+  "homepage": "https://github.com/greatsumini/finance-crawl#readme",
+  "bugs": {
+    "url": "https://github.com/greatsumini/finance-crawl/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.20.2",
     "axios": "^1.6.0",

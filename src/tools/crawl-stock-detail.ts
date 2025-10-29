@@ -21,7 +21,7 @@ export const crawlStockDetailTool = {
         return {
           content: [
             {
-              type: 'text',
+              type: 'text' as const,
               text: JSON.stringify({
                 success: false,
                 error: 'Stock not found or failed to crawl',
@@ -40,7 +40,7 @@ export const crawlStockDetailTool = {
       return {
         content: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: JSON.stringify({
               success: true,
               stockCode,
@@ -58,7 +58,7 @@ export const crawlStockDetailTool = {
       return {
         content: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: JSON.stringify({
               success: false,
               error: error instanceof Error ? error.message : 'Unknown error occurred',

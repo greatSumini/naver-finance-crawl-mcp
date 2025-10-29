@@ -13,7 +13,7 @@ export const crawlTopStocksTool = {
         return {
           content: [
             {
-              type: 'text',
+              type: 'text' as const,
               text: JSON.stringify({
                 success: false,
                 error: 'No top stocks data found',
@@ -27,7 +27,7 @@ export const crawlTopStocksTool = {
       return {
         content: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: JSON.stringify({
               success: true,
               count: topStocks.length,
@@ -41,7 +41,7 @@ export const crawlTopStocksTool = {
       return {
         content: [
           {
-            type: 'text',
+            type: 'text' as const,
             text: JSON.stringify({
               success: false,
               error: error instanceof Error ? error.message : 'Unknown error occurred',

@@ -1,0 +1,39 @@
+# Source files
+src/
+tests/
+
+# Configuration files
+.eslintrc.json
+.prettierrc.json
+.prettierignore
+tsconfig.json
+vitest.config.ts
+
+# Development files
+.git/
+.gitignore
+*.log
+*.test.ts
+*.spec.ts
+
+# Documentation (included via files field)
+docs/
+examples/
+prompts/
+
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+
+# Build artifacts
+*.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
