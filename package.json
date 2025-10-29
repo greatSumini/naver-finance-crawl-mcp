@@ -1,12 +1,12 @@
 {
-  "name": "finance-crawl",
-  "version": "1.0.0",
+  "name": "naver-finance-crawl-mcp",
+  "version": "0.0.0",
   "description": "A Node.js-based web crawler using Axios and Cheerio",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "finance-crawl-mcp": "dist/mcp-server.js"
+    "naver-finance-crawl-mcp": "dist/mcp-server.js"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
