@@ -1,5 +1,9 @@
 // Export crawlers
-export { BaseCrawler } from './crawlers/index.js';
+export {
+  BaseCrawler,
+  ExampleCrawler,
+  NaverFinanceCrawler,
+} from './crawlers/index.js';
 
 // Export utilities
 export { HttpClient, HtmlParser } from './utils/index.js';
@@ -10,4 +14,5 @@ export type {
   CrawlResult,
   HttpResponse,
   ParserOptions,
+  StockData,
 } from './types/index.js';
