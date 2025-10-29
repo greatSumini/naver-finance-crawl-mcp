@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import iconv from 'iconv-lite';
 import { CrawlerOptions, HttpResponse } from '../types/index.js';
 
 /**
@@ -16,6 +17,8 @@ export class HttpClient {
         'User-Agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
       },
+      // responseType을 arraybuffer로 설정하여 바이너리 데이터 수신
+      responseType: 'arraybuffer',
     });
   }
 
@@ -28,9 +31,13 @@ export class HttpClient {
     for (let attempt = 0; attempt < this.retries; attempt++) {
       try {
         const response = await this.client.get(url);
+
+        // EUC-KR로 인코딩된 데이터를 UTF-8로 변환
+        const decodedData = iconv.decode(Buffer.from(response.data), 'EUC-KR');
+
         return {
           status: response.status,
-          data: response.data,
+          data: decodedData,
           headers: response.headers,
         };
       } catch (error) {
