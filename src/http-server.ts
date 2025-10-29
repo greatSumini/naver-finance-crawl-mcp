@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from 'express';
 import { NaverFinanceCrawler } from './crawlers/naverFinanceCrawler.js';
 import { StockData } from './types/index.js';
+import { crawlTopSearchedStocksRobust } from './crawlers/TopStocksCrawler.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +23,68 @@ app.get('/health', (_req: Request, res: Response) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
   });
+});
+
+/**
+ * 검색 상위 종목 및 상세 정보 크롤링 API
+ * GET /api/stock/top
+ *
+ * @returns 최상위 인기 종목 리스트와 각 종목의 상세 정보
+ */
+app.get('/api/stock/top', async (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    // 1. 최상위 인기 종목 리스트 크롤링
+    console.log('[Top Stocks] 검색 상위 종목 크롤링 시작...');
+    const topStocks = await crawlTopSearchedStocksRobust();
+
+    if (topStocks.length === 0) {
+      res.status(404).json({
+        error: 'No data found',
+        message: '검색 상위 종목 데이터를 찾을 수 없습니다.',
+      });
+      return;
+    }
+
+    console.log(`[Top Stocks] ${topStocks.length}개 종목 발견, 상세 정보 크롤링 시작...`);
+
+    // 2. 각 종목의 code를 추출하여 NaverFinanceCrawler로 상세 정보 크롤링
+    const stockCodes = topStocks.map((stock) => stock.code);
+    const urls = stockCodes.map((code) => NaverFinanceCrawler.buildUrl(code));
+
+    // 3. 병렬 크롤링 수행
+    const detailedResults = await crawler.crawlMultiple(urls);
+
+    // 4. 결과 조합: top stocks 기본 정보 + 상세 정보
+    const combinedData = topStocks.map((topStock, index) => {
+      const detailedResult = detailedResults[index];
+      return {
+        // 검색 상위 종목 기본 정보
+        rank: topStock.rank,
+        searchRatio: topStock.searchRatio,
+        // 상세 크롤링 정보
+        success: detailedResult.data !== null,
+        stockCode: topStock.code,
+        detailedData: detailedResult.data as StockData,
+        metadata: {
+          url: detailedResult.url,
+          timestamp: detailedResult.timestamp,
+          statusCode: detailedResult.statusCode,
+        },
+      };
+    });
+
+    console.log(`[Top Stocks] 총 ${combinedData.length}개 종목 상세 정보 크롤링 완료`);
+
+    // 5. 성공 응답
+    res.json({
+      success: true,
+      count: combinedData.length,
+      data: combinedData,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    next(error);
+  }
 });
 
 /**
@@ -176,6 +239,7 @@ app.use((_req: Request, res: Response) => {
     availableEndpoints: [
       'GET /health',
       'GET /api/stock/:code',
+      'GET /api/stock/top',
       'POST /api/stocks',
     ],
   });
@@ -196,10 +260,12 @@ const server = app.listen(PORT, () => {
 Available endpoints:
   • GET  /health          - Health check
   • GET  /api/stock/:code - Get single stock data
+  • GET  /api/stock/top   - Get top searched stocks with details
   • POST /api/stocks      - Get multiple stocks data
 
 Example:
   curl http://localhost:${PORT}/api/stock/005930
+  curl http://localhost:${PORT}/api/stock/top
 `);
 });
 

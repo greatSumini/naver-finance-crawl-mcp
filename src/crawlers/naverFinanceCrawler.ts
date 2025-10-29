@@ -195,7 +195,7 @@ export class NaverFinanceCrawler extends BaseCrawler {
       if (thText.includes(label)) {
         // 다음 td 요소의 값 추출
         const td = $(th).next('td');
-        result = td.text().trim();
+        result = this.cleanText(td.text());
         return false; // break
       }
     });
@@ -207,7 +207,7 @@ export class NaverFinanceCrawler extends BaseCrawler {
         if (elText === label) {
           const nextEm = $(el).next('em');
           if (nextEm.length) {
-            result = nextEm.text().trim();
+            result = this.cleanText(nextEm.text());
             return false;
           }
         }
@@ -215,6 +215,16 @@ export class NaverFinanceCrawler extends BaseCrawler {
     }
 
     return result;
+  }
+
+  /**
+   * 헬퍼: 텍스트 정리 (공백, 탭, 줄바꿈 제거)
+   */
+  private cleanText(text: string): string {
+    return text
+      .replace(/[\n\r\t]/g, '') // 줄바꿈, 탭 제거
+      .replace(/\s+/g, ' ') // 연속된 공백을 하나로
+      .trim(); // 양쪽 공백 제거
   }
 
   /**
